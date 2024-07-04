@@ -94,6 +94,7 @@ import Product from "./pages/admin/Product.jsx";
 import DashboardStaff from "./pages/staff/Dashboardstaff.jsx";
 import Order from "./pages/staff/Order";
 import ListOrder from "./pages/staff/ListOrder";
+import Supplier from "./pages/admin/Supplier.jsx";
 
 const App = createBrowserRouter([
   {
@@ -130,9 +131,21 @@ const App = createBrowserRouter([
         path: "product",
         element: <Product />,
       },
+      // {
+      //   path: "dashboard",
+      //   element: <DashboardStaff />,
+      // },
       {
         path: "order",
         element: <Order />,
+      },
+      {
+        path: "listorder",
+        element: <ListOrder />,
+      },
+      {
+        path: "supplier",
+        element: <Supplier />,
       },
       {
         path: "users",
@@ -168,6 +181,14 @@ const App = createBrowserRouter([
       {
         path: "listorder",
         element: <ListOrder />,
+      },
+      {
+        path: "category",
+        element: <Category />,
+      },
+      {
+        path: "product",
+        element: <Product />,
       },
     ],
   },

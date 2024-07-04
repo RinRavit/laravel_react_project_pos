@@ -6,6 +6,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ListOrderController;
+use App\Http\Controllers\SupplierController;
+
+
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -54,3 +58,6 @@ Route::get('/orders', [OrderController::class, 'index']); // To fetch all orders
 
 
 Route::get('/orders/today', [ListOrderController::class, 'index']);
+Route::get('/orders/chart-data', [OrderController::class, 'getChartData']);
+// Supplier
+Route::apiResource('suppliers', SupplierController::class);

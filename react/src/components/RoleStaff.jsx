@@ -602,6 +602,7 @@
 import { Link, Navigate, Outlet } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import axiosClient from "../axios-client.js";
+import LOGO_SHOP from "../assets/image/LOGO_SHOP.jpg";
 
 export default function RoleStaff() {
   const { user, token, setUser, setToken } = useStateContext();
@@ -629,10 +630,30 @@ export default function RoleStaff() {
         <Link to="/staff/dashboard">Dashboard</Link>
         <Link to="/staff/order">Order</Link>
         <Link to="/staff/listorder">List Order</Link>
+        <Link to="/staff/category">Category</Link>
+        <Link to="/staff/Product">Product</Link>
       </aside>
       <div className="content">
         <header>
-          <div>Header</div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: " 10px",
+            }}
+          >
+            <div>
+              <img
+                src={LOGO_SHOP}
+                alt=""
+                style={{
+                  width: "40px",
+                  borderRadius: "50px",
+                }}
+              />
+            </div>
+            <div>OneShop</div>
+          </div>
 
           <div>
             {user.name} &nbsp; &nbsp;

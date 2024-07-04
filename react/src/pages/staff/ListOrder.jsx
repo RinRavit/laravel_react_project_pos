@@ -7,7 +7,7 @@ function ListOrder() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const ordersResponse = await axiosClient.get("/orders/today");
+        const ordersResponse = await axiosClient.get("/orders");
         setOrders(ordersResponse.data);
       } catch (error) {
         console.error("Error fetching orders data", error);
@@ -24,7 +24,7 @@ function ListOrder() {
   return (
     <div style={{ padding: "20px" }}>
       <div style={{ marginTop: "20px" }}>
-        <h3>Today's Orders</h3>
+        <h3>List all Orders</h3>
         <table style={tableStyle}>
           <thead>
             <tr>

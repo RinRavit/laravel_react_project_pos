@@ -103,6 +103,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Carbon\Carbon;
 
+
 class OrderController extends Controller
 {
     public function store(Request $request)
@@ -162,6 +163,36 @@ public function index()
     $orders = Order::with('user')->get();
     return response()->json($orders);
 }
+public function getChartData()
+{
+    $startDate = Carbon::now()->startOfWeek();
+    $endDate = Carbon::now()->endOfWeek();
 
+    $orders = Order::whereBetween('created_at', [$startDate, $endDate])
+        ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+        ->groupBy('date')
+        ->get();
+
+    $labels = [];
+    $data = [];
+
+    $datePeriod = new \DatePeriod(
+        $startDate,
+        new \DateInterval('P1D'),
+        $endDate
+    );
+
+    foreach ($datePeriod as $date) {
+        $formattedDate = $date->format('Y-m-d');
+        $labels[] = $formattedDate;
+        $order = $orders->firstWhere('date', $formattedDate);
+        $data[] = $order ? $order->count : 0;
+    }
+
+    return response()->json([
+        'labels' => $labels,
+        'data' => $data,
+    ]);
+}
 
 }
