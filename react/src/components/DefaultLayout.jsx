@@ -296,18 +296,10 @@ import { useEffect } from "react";
 import LOGO_SHOP from "../assets/image/LOGO_SHOP.jpg";
 import Box from "../assets/image/Box.png";
 import Supplier from "../assets/image/Supplies.png";
-import Addcart from "../assets/image/Addcart.png";
 import Dashboard from "../assets/image/Dashboard.png";
-import Dollar from "../assets/image/Dollar.png";
-import Dollarsymbol from "../assets/image/Dollarsymbol.png";
 import Download from "../assets/image/Download.png";
-import Idcard from "../assets/image/Idcard.png";
-import Mechanicalgears from "../assets/image/Mechanicalgears.png";
 import Multipleusers from "../assets/image/Multipleusers.png";
-import Pdf from "../assets/image/Pdf.png";
-import Shoppingcart from "../assets/image/Shoppingcart.png";
 import Truck from "../assets/image/Truck.png";
-import UserLogo from "../assets/image/UserLogo.png";
 
 export default function DefaultLayout() {
   const { user, token, setUser, setToken, notification } = useStateContext();
@@ -438,7 +430,7 @@ export default function DefaultLayout() {
             </div>
           </div>
         </Link>
-        <Link to="/staff/listorder">
+        <Link to="/admin/list_order">
           <div
             style={{
               display: "flex",
@@ -450,7 +442,7 @@ export default function DefaultLayout() {
             <div>
               <img
                 src={Download}
-                alt="Dashboard"
+                alt="ListOrder"
                 style={{
                   width: "25px",
                 }}
@@ -484,7 +476,29 @@ export default function DefaultLayout() {
             </div>
           </div>
         </Link>
-        <Link to="/admin/supplier">Supplier</Link>
+        <Link to="/admin/supplier">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <div>
+              <img
+                src={Truck}
+                alt="Dashboard"
+                style={{
+                  width: "25px",
+                }}
+              />
+            </div>
+            <div>
+              <p>Users</p>
+            </div>
+          </div>
+        </Link>
       </aside>
       <div className="content">
         <header>

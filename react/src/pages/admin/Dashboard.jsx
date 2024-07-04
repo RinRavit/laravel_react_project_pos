@@ -961,7 +961,7 @@ import Barchart from "../../assets/image/Barchart.png"; // Import the icons
 import axiosClient from "../../axios-client"; // Import your axios client
 import ChartComponent from "../staff/ChartComponent"; // Import your chart component
 
-function Dashboardstaff() {
+function Dashboard() {
   const [todaySales, setTodaySales] = useState(0);
   const [yesterdaySales, setYesterdaySales] = useState(0);
   const [todayRevenue, setTodayRevenue] = useState(0);
@@ -969,6 +969,10 @@ function Dashboardstaff() {
   const [lowStockProducts, setLowStockProducts] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [chartLabels, setChartLabels] = useState([]);
+
+  // New states for total orders and total amount
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalOrderAmount, setTotalOrderAmount] = useState(0);
 
   useEffect(() => {
     const fetchSalesData = async () => {
@@ -990,6 +994,7 @@ function Dashboardstaff() {
         setOrders(ordersResponse.data);
 
         const productsResponse = await axiosClient.get("/products");
+        // alert lower stock
         const lowStock = productsResponse.data.filter(
           (product) => product.stock < 5
         );
@@ -999,6 +1004,12 @@ function Dashboardstaff() {
         const chartResponse = await axiosClient.get("/orders/chart-data");
         setChartData(chartResponse.data.data);
         setChartLabels(chartResponse.data.labels);
+
+        // Set total orders and total order amount
+        setTotalOrders(ordersResponse.data.length);
+        setTotalOrderAmount(
+          ordersResponse.data.reduce((total, order) => total + order.total, 0)
+        );
       } catch (error) {
         console.error("Error fetching sales data", error);
       }
@@ -1038,6 +1049,16 @@ function Dashboardstaff() {
           </div>
           <img src={Barchart} alt="Today Revenue" style={iconStyle} />
         </div>
+        <div style={cardStyle}>
+          <div style={textStyle}>
+            <h3>Today Orders</h3>
+            <p style={amountStyle}>
+              {totalOrders} / ${formatPrice(totalOrderAmount)}
+            </p>
+            <p>today_order / total order</p>
+          </div>
+          <img src={Barchart} alt="Total Orders" style={iconStyle} />
+        </div>
       </div>
       <div
         style={{
@@ -1048,48 +1069,32 @@ function Dashboardstaff() {
       >
         <div style={{ width: "70%" }}>
           <h3>Today's Orders</h3>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>User Name</th>
-                <th>Total</th>
-                <th>Payment Method</th>
-                <th>Currency</th>
-                <th>Order Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.slice(0, 10).map((order) => (
-                <tr key={order.id}>
-                  <td>{order.id}</td>
-                  <td>{order.user.name}</td>
-                  <td>${formatPrice(order.total)}</td>
-                  <td>{order.payment_method}</td>
-                  <td>{order.currency}</td>
-                  <td>{new Date(order.created_at).toLocaleDateString()}</td>
+          <div style={scrollContainerStyle}>
+            <table style={tableStyle}>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>User Name</th>
+                  <th>Total</th>
+                  <th>Payment Method</th>
+                  <th>Currency</th>
+                  <th>Order Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          {orders.length > 10 && (
-            <div style={scrollContainerStyle}>
-              <table style={tableStyle}>
-                <tbody>
-                  {orders.slice(10).map((order) => (
-                    <tr key={order.id}>
-                      <td>{order.id}</td>
-                      <td>{order.user.name}</td>
-                      <td>${formatPrice(order.total)}</td>
-                      <td>{order.payment_method}</td>
-                      <td>{order.currency}</td>
-                      <td>{new Date(order.created_at).toLocaleDateString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id}>
+                    <td>P000{order.id}</td>
+                    <td>{order.user.name}</td>
+                    <td>${formatPrice(order.total)}</td>
+                    <td>{order.payment_method}</td>
+                    <td>{order.currency}</td>
+                    <td>{new Date(order.created_at).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div style={{ width: "25%", marginLeft: "20px" }}>
           <h3>Low Stock Alerts</h3>
@@ -1151,11 +1156,18 @@ const tableStyle = {
 };
 
 const scrollContainerStyle = {
-  height: "200px",
+  height: "400px",
   overflowY: "scroll",
   marginTop: "20px",
   border: "1px solid #ddd",
   borderRadius: "8px",
+  // Hide the scrollbar
+  scrollbarWidth: "none" /* Firefox */,
+  msOverflowStyle: "none" /* Internet Explorer 10+ */,
+};
+
+scrollContainerStyle["::-webkit-scrollbar"] = {
+  display: "none" /* Safari and Chrome */,
 };
 
 const alertBoxStyle = {
@@ -1169,4 +1181,4 @@ const alertItemStyle = {
   padding: "5px 0",
 };
 
-export default Dashboardstaff;
+export default Dashboard;

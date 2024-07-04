@@ -39,7 +39,7 @@ function ListOrder() {
           <tbody>
             {orders.map((order) => (
               <tr key={order.id}>
-                <td>{order.id}</td>
+                <td>P000{order.id}</td>
                 <td>{order.user.name}</td>
                 <td>${formatPrice(order.total)}</td>
                 <td>{order.payment_method}</td>
