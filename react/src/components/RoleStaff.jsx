@@ -603,6 +603,7 @@ import { Link, Navigate, Outlet } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import axiosClient from "../axios-client.js";
 import LOGO_SHOP from "../assets/image/LOGO_SHOP.jpg";
+import { FileX } from "lucide-react";
 
 export default function RoleStaff() {
   const { user, token, setUser, setToken } = useStateContext();
@@ -625,36 +626,39 @@ export default function RoleStaff() {
   };
 
   return (
+
     <div id="roleStaffLayout">
-      <aside>
+
+      <aside style={{
+        display: "flex",
+        alignItems: "center",
+        // gap: "30px",
+
+      }}>
+        <div>
+          <img
+            src={LOGO_SHOP}
+            alt=""
+            style={{
+              width: "40px",
+              borderRadius: "50px",
+            }}
+          />
+        </div>
+        
         <Link to="/staff/dashboard">Dashboard</Link>
         <Link to="/staff/order">Order</Link>
         <Link to="/staff/listorder">List Order</Link>
         <Link to="/staff/category">Category</Link>
         <Link to="/staff/Product">Product</Link>
+        
+
       </aside>
       <div className="content">
-        <header>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: " 10px",
-            }}
-          >
-            <div>
-              <img
-                src={LOGO_SHOP}
-                alt=""
-                style={{
-                  width: "40px",
-                  borderRadius: "50px",
-                }}
-              />
-            </div>
-            <div>OneShop</div>
-          </div>
-
+        <header style={{
+          // backgroundColor: "red"
+        }}>
+          
           <div>
             {user.name} &nbsp; &nbsp;
             <a onClick={onLogout} className="btn-logout" href="#">
