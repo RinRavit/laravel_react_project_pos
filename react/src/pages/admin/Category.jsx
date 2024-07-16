@@ -48,86 +48,101 @@ const Category = () => {
   };
 
   const handleAddClick = async () => {
-    if (newCategoryName.trim() !== "") {
-      const isDuplicate = categories.some(
-        (category) =>
-          category.name.toLowerCase() === newCategoryName.toLowerCase()
-      );
-
-      if (isDuplicate) {
-        alert("This Category already exists. Please add a new Category.");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("name", newCategoryName);
-      if (newCategoryImage) {
-        formData.append("image", newCategoryImage);
-      }
-
-      try {
-        const response = await axiosClient.post("/categories", formData, {
+    if (newCategoryName.trim() === "") {
+      alert("Please enter a category name.");
+      return;
+    }
+  
+    if (!newCategoryImage) {
+      alert("Please upload an image.");
+      return;
+    }
+  
+    const isDuplicate = categories.some(
+      (category) =>
+        category.name.toLowerCase() === newCategoryName.toLowerCase()
+    );
+  
+    if (isDuplicate) {
+      alert("This Category already exists. Please add a new Category.");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("name", newCategoryName);
+    formData.append("image", newCategoryImage);
+  
+    try {
+      const response = await axiosClient.post("/categories", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setCategories([...categories, response.data]);
+      setShowForm(false);
+      setNewCategoryName("");
+      setNewCategoryImage(null);
+    } catch (error) {
+      console.error("Error adding category:", error);
+    }
+  };
+  
+  const handleUpdateClick = async () => {
+    if (newCategoryName.trim() === "") {
+      alert("Please enter a category name.");
+      return;
+    }
+  
+    if (!newCategoryImage) {
+      alert("Please upload an image.");
+      return;
+    }
+  
+    const isDuplicate = categories.some(
+      (category) =>
+        category.id !== editCategoryId &&
+        category.name.toLowerCase() === newCategoryName.toLowerCase()
+    );
+  
+    if (isDuplicate) {
+      alert("This Category already exists. Please use a different name.");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("name", newCategoryName);
+    formData.append("image", newCategoryImage);
+  
+    try {
+      const response = await axiosClient.post(
+        `/categories/${editCategoryId}`,
+        formData,
+        {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        });
-        setCategories([...categories, response.data]);
-        setShowForm(false);
-        setNewCategoryName("");
-        setNewCategoryImage(null);
-      } catch (error) {
-        console.error("Error adding category:", error);
-      }
-    }
-  };
-
-  const handleUpdateClick = async () => {
-    if (newCategoryName.trim() !== "") {
-      const isDuplicate = categories.some(
-        (category) =>
-          category.id !== editCategoryId &&
-          category.name.toLowerCase() === newCategoryName.toLowerCase()
+          params: {
+            _method: "PUT",
+          },
+        }
       );
-
-      if (isDuplicate) {
-        alert("This Category already exists. Please use a different name.");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("name", newCategoryName);
-      if (newCategoryImage) {
-        formData.append("image", newCategoryImage);
-      }
-
-      try {
-        const response = await axiosClient.post(
-          `/categories/${editCategoryId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            params: {
-              _method: "PUT",
-            },
-          }
-        );
-        const updatedCategories = categories.map((category) =>
-          category.id === editCategoryId ? response.data : category
-        );
-        setCategories(updatedCategories);
-        setShowForm(false);
-        setNewCategoryName("");
-        setNewCategoryImage(null);
-        setCurrentCategoryImage(null);
-        setEditCategoryId(null);
-        setEditMode(false);
-      } catch (error) {
-        console.error("Error updating category:", error);
-      }
+      const updatedCategories = categories.map((category) =>
+        category.id === editCategoryId ? response.data : category
+      );
+      setCategories(updatedCategories);
+      setShowForm(false);
+      setNewCategoryName("");
+      setNewCategoryImage(null);
+      setCurrentCategoryImage(null);
+      setEditCategoryId(null);
+      setEditMode(false);
+    } catch (error) {
+      console.error("Error updating category:", error);
     }
   };
+  
+
+
 
   const handleEditClick = (id, name, image) => {
     setEditMode(true);
